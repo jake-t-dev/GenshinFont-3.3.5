@@ -1,7 +1,7 @@
 
 GenshinFont = CreateFrame("Frame", "GenshinFont");
 
-local damagefont_FONT_NUMBER = "Interface\\AddOns\\GenshinFont\\font.ttf";
+local damagefont_FONT_NUMBER = "Interface\\AddOns\\GenshinFont-3.3.5\\font.ttf";
 
 function GenshinFont:ApplySystemFonts()
 
