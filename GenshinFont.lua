@@ -1,51 +1,47 @@
-GenshinFont = CreateFrame("Frame", "GenshinFont");
+local GenshinFont = CreateFrame("Frame")
+local fontPath = "Interface\\AddOns\\GenshinFont-3.3.5\\font.ttf"
 
-local fontPath = "Interface\\AddOns\\GenshinFont-3.3.5\\font.ttf";
+function GenshinFont:ApplyAllFonts()
+    -- 1. Replace the standard Global Strings (Damage, Chat, etc)
+    DAMAGE_TEXT_FONT = fontPath
+    UNIT_NAME_FONT = fontPath
+    NAMEPLATE_FONT = fontPath
+    CHAT_FONT_HEIGHTS = {12, 13, 14, 15, 16, 17, 18, 20, 22, 24}
 
-function GenshinFont:ApplySystemFonts()
-    -- Damage Numbers
-    DAMAGE_TEXT_FONT = fontPath;
+    -- 2. Loop through the internal UI font objects
+    -- This covers buttons, health bars, quest logs, and menus
+    local fonts = {
+        "GameFontNormal", "GameFontHighlight", "GameFontDisable",
+        "GameFontNormalSmall", "GameFontHighlightSmall", "GameFontDisableSmall",
+        "GameFontNormalLarge", "GameFontHighlightLarge", "GameFontDisableLarge",
+        "GameFontNormalHuge", "GameFontHighlightHuge",
+        "SystemFont_Tiny", "SystemFont_Small", "SystemFont_Med1", "SystemFont_Med2",
+        "SystemFont_Med3", "SystemFont_Large", "SystemFont_Huge1", "SystemFont_Huge2",
+        "QuestFont", "QuestFont_Large", "QuestFont_Shadow_Huge", "QuestTitleFont",
+        "QuestTitleFontBlackShadow", "NumberFontNormal", "NumberFontNormalSmall",
+        "NumberFontNormalLarge", "NumberFontNormalHuge", "ChatFontNormal",
+        "ChatFontSmall", "SpellFont_Small", "InvoiceFont_Med", "InvoiceFont_Small",
+        "Tooltip_Med", "Tooltip_Small", "FriendsFont_Normal", "FriendsFont_Small",
+        "FriendsFont_Large", "FriendsFont_UserText"
+    }
 
-    -- Main UI Fonts
-    UIDP_Font = fontPath; 
-    SystemFont_Tiny = fontPath;
-    SystemFont_Small = fontPath;
-    SystemFont_Outline_Small = fontPath;
-    SystemFont_Shadow_Small = fontPath;
-    SystemFont_Inverse_Small = fontPath;
-    SystemFont_Med1 = fontPath;
-    SystemFont_Med2 = fontPath;
-    SystemFont_Med3 = fontPath;
-    SystemFont_Shadow_Med1 = fontPath;
-    SystemFont_Shadow_Med2 = fontPath;
-    SystemFont_Shadow_Med3 = fontPath;
-    SystemFont_Large = fontPath;
-    SystemFont_Shadow_Large = fontPath;
-    SystemFont_Huge1 = fontPath;
-    SystemFont_Huge2 = fontPath;
-    SystemFont_Shadow_Huge1 = fontPath;
-    SystemFont_Shadow_Huge2 = fontPath;
-    SystemFont_Shadow_Huge3 = fontPath;
-    
-    -- Chat and Input
-    ChatFontNormal = fontPath;
-    
-    -- Headers
-    QuestFont = fontPath;
-    QuestFont_Large = fontPath;
-    QuestFont_Huge = fontPath;
-    QuestFont_Shadow_Huge = fontPath;
-    QuestFont_Super_Huge = fontPath;
-    QuestFont_Shadow_Small = fontPath;
+    for _, fontName in pairs(fonts) do
+        local fontObj = _G[fontName]
+        if fontObj then
+            local _, size, flags = fontObj:GetFont()
+            fontObj:SetFont(fontPath, size, flags)
+        end
+    end
 end
 
-GenshinFont:SetScript("OnEvent", function() 
-    if (event == "ADDON_LOADED") then
-        GenshinFont:ApplySystemFonts()
+-- Force updates when the addon loads or variables change
+GenshinFont:RegisterEvent("ADDON_LOADED")
+GenshinFont:RegisterEvent("VARIABLES_LOADED")
+GenshinFont:SetScript("OnEvent", function(self, event, arg1)
+    if event == "ADDON_LOADED" and arg1 == "GenshinFont-3.3.5" then
+        self:ApplyAllFonts()
     end
-end);
+end)
 
-GenshinFont:RegisterEvent("ADDON_LOADED");
-
--- Apply
-GenshinFont:ApplySystemFonts()
+-- Run once immediately
+GenshinFont:ApplyAllFonts()
