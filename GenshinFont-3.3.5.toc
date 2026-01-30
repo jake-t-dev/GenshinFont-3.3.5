@@ -1,7 +1,7 @@
 ## Interface: 40000
-## Title: GenshinFont
+## Title: GenshinFont-3.3.5
 ## DefaultState: Enabled
 ## Author: jake-t-dev
-## Version: 40000
+## Version: 3.3.5
 ## Notes: lol
 GenshinFont.lua 
