@@ -1,0 +1,7 @@
+## Interface: 40000
+## Title: GenshinFont
+## DefaultState: Enabled
+## Author: jake-t-dev
+## Version: 40000
+## Notes: lol
+GenshinFont.lua 
